@@ -17,12 +17,15 @@ treatment_map = {
 }
 
 def suggest_treatment(symptoms):
-    # For demo, we directly use the treatment map
-    # In a real system, the AI model would analyze symptoms
-    result = treatment_map.get(symptoms, {
-        "diagnosis": "Unknown",
-        "treatment": "Consult a doctor"
-    })
+    symptoms_list = symptoms.lower().split(", ")
+    if "fever" in symptoms_list and "cough" in symptoms_list:
+        return {"diagnosis": "Possible Pneumonia", "treatment": "Antibiotics, oxygen therapy"}
+    elif "headache" in symptoms_list and "fever" in symptoms_list:
+        return {"diagnosis": "Possible Migraine or Flu", "treatment": "Rest, hydration, pain relievers"}
+    elif "sore throat" in symptoms_list and "cough" in symptoms_list:
+        return {"diagnosis": "Possible Strep Throat", "treatment": "Antibiotics, throat lozenges"}
+    else:
+        return {"diagnosis": "Unknown", "treatment": "Consult a doctor"}
     return result
 
 # Test the function
