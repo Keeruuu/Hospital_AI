@@ -1,34 +1,52 @@
-from transformers import pipeline
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import make_pipeline
 
-# Load a pre-trained model for text classification
-# We're using a simple model for demo purposes
-classifier = pipeline("sentiment-analysis")  # Placeholder model
+# Load the entire dataset (the book of examples)
+data = pd.read_csv("symptom_data.csv")  # Load all rows, not just the first 15
+X = data["symptoms"]  # The symptoms column
+y = data["diagnosis"]  # The diagnosis column
 
-# Simulated treatment mapping (since we don't have a real medical model yet)
-treatment_map = {
-    "fever, cough, shortness of breath": {
-        "diagnosis": "Possible Pneumonia",
-        "treatment": "Antibiotics, oxygen therapy"
-    },
-    "headache, nausea, dizziness": {
-        "diagnosis": "Possible Migraine",
-        "treatment": "Pain relievers, rest"
-    }
-}
+# Create a machine learning model
+model = make_pipeline(TfidfVectorizer(), MultinomialNB())
+model.fit(X, y)  # Teach the model using the full dataset
 
 def suggest_treatment(symptoms):
-    symptoms_list = symptoms.lower().split(", ")
-    if "fever" in symptoms_list and "cough" in symptoms_list:
-        return {"diagnosis": "Possible Pneumonia", "treatment": "Antibiotics, oxygen therapy"}
-    elif "headache" in symptoms_list and "fever" in symptoms_list:
-        return {"diagnosis": "Possible Migraine or Flu", "treatment": "Rest, hydration, pain relievers"}
-    elif "sore throat" in symptoms_list and "cough" in symptoms_list:
-        return {"diagnosis": "Possible Strep Throat", "treatment": "Antibiotics, throat lozenges"}
-    else:
-        return {"diagnosis": "Unknown", "treatment": "Consult a doctor"}
-    return result
+    if not symptoms:
+        return {"diagnosis": "Unknown", "treatment": "Please provide symptoms"}
+    
+    # Use the model to guess the sickness
+    diagnosis = model.predict([symptoms])[0]
 
-# Test the function
-symptoms = "fever, cough, shortness of breath"
-result = suggest_treatment(symptoms)
-print(result)
+    # Suggest a treatment based on the diagnosis
+    treatments = {
+        "Pneumonia": "Antibiotics, oxygen therapy",
+        "Flu": "Rest, hydration, pain relievers",
+        "Strep Throat": "Antibiotics, throat lozenges",
+        "Heart Issue": "Seek emergency medical attention immediately",
+        "Stomach Issue": "Rest, avoid heavy food, consult a doctor",
+        "Dehydration": "Drink water, sit down, consult a doctor",
+        "Food Poisoning": "Stay hydrated, rest, consult a doctor",
+        "Diarrhea": "Drink oral rehydration solution, rest, consult a doctor",
+        "Viral Infection": "Stay hydrated, rest, antiviral medication if prescribed",
+        "Allergic Reaction": "Take antihistamines, consult a doctor",
+        "Measles": "Rest, stay hydrated, consult a doctor immediately",
+        "Dengue": "Rest, stay hydrated, consult a doctor immediately",
+        "Anemia": "Eat iron-rich foods, consult a doctor for supplements",
+        "Cold": "Rest, stay hydrated, take over-the-counter cold medicine",
+        "Migraine": "Rest in a dark room, take pain relievers, consult a doctor",
+        "Ear Infection": "Antibiotics if prescribed, consult a doctor",
+        "Tonsillitis": "Antibiotics if bacterial, rest, consult a doctor",
+        "Malaria": "Antimalarial medication, consult a doctor immediately",
+        "Depression": "Talk to a trusted person, consult a doctor or therapist",
+        "Gastroenteritis": "Stay hydrated, rest, consult a doctor",
+        "Chickenpox": "Rest, avoid scratching, consult a doctor",
+        "Low Blood Pressure": "Drink water, eat small meals, consult a doctor",
+        "Skin Infection": "Keep the area clean, use antibiotic cream, consult a doctor",
+        "Allergies": "Avoid allergens, take antihistamines, consult a doctor",
+        "Acid Reflux": "Avoid spicy foods, eat smaller meals, consult a doctor"
+    }
+    
+    treatment = treatments.get(diagnosis, "Consult a doctor")
+    return {"diagnosis": diagnosis, "treatment": treatment}
