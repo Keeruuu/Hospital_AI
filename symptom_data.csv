@@ -1,0 +1,30 @@
+"fever,cough,shortness of breath",Pneumonia
+"headache,fever",Flu
+"sore throat,cough",Strep Throat
+"heart pain",Heart Issue
+"stomach pain",Stomach Issue
+"dizziness",Dehydration
+"fever,cough,headache",Pneumonia
+"stomach pain,nausea",Food Poisoning
+"motions",Diarrhea
+"motions,fever",Viral Infection
+"motions,dizziness",Dehydration
+"vomiting,nausea",Food Poisoning
+"fever,chills",Flu
+"rash,itching",Allergic Reaction
+"fever,rash",Measles
+"chest pain,shortness of breath",Heart Issue
+"joint pain,fever",Dengue
+"fatigue,loss of appetite",Anemia
+"runny nose,sore throat",Cold
+"blurry vision,headache",Migraine
+"ear pain,fever",Ear Infection
+"swollen lymph nodes,sore throat",Tonsillitis
+"fever,chills,joint pain",Malaria
+"fatigue,headache,loss of appetite",Depression
+"vomiting,stomach pain,fever",Gastroenteritis
+"rash,fever,headache",Chickenpox
+"dizziness,fatigue",Low Blood Pressure
+"itching,swollen lymph nodes",Skin Infection
+"runny nose,itching",Allergies
+"chest pain,nausea",Acid Reflux
